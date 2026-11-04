@@ -1,0 +1,7 @@
+# Plain NumPy: every estimator is written out by hand.
+
+numpy>=1.26
+matplotlib>=3.8
+
+# Notebook
+jupyterlab>=4.0
