@@ -27,7 +27,7 @@ flowchart LR
         DL["07 Causal deep learning<br/>DML · TMLE · Dragonnet · discovery"]
         OL["08 Orthogonal learning<br/>Foster & Syrgkanis"]
         CO["09 Cocycles<br/>Dance & Bloem-Reddy"]
-        RL["11 Reinforcement learning<br/>bandits · off-policy"]
+        RL["11 Reinforcement learning<br/>bandits · offline RL · OPE"]
     end
     ALL(["12 One dataset, many estimators<br/>the hospital, estimated by every method"])
 
@@ -45,6 +45,7 @@ flowchart LR
     OL -- "beyond conditional means: full counterfactuals" --> CO
     PS -- "DR value of a policy" --> RL
     SCM -- "PNS as a training objective" --> DL
+    SCM -- "g-formula, hidden confounding in logs" --> RL
 
     click PO "01-potential-outcomes/" "Potential outcomes"
     click REG "02-regression/" "Regression"
@@ -76,7 +77,7 @@ If the nodes are not clickable in your viewer (GitHub sometimes disables Mermaid
 | Nov 3 | [08 Orthogonal learning](08-orthogonal-learning/) | [Foster & Syrgkanis 2023] Orthogonal statistical learning; [Chernozhukov+ 2018] DML | [`dml/`](08-orthogonal-learning/dml/): Neyman orthogonality measured, cross-fitting, R-learner |
 | Nov 5–17 | [09 Cocycles](09-cocycles/) | [Dance & Bloem-Reddy 2024] Causal inference with cocycles | |
 | Nov 19 | [10 Instruments & discontinuities](10-instruments-and-discontinuities/) | [Hartford+ 2017] Deep IV · [Bennett+ 2019] Deep GMM · RDD lecture | [`iv-rdd/`](10-instruments-and-discontinuities/iv-rdd/): 2SLS and sieve IV on hotel pricing, RDD with CV bandwidth |
-| Nov 24 | [11 Reinforcement learning](11-reinforcement-learning/) | lecture: bandits, contextual bandits, off-policy RL | |
+| Nov 24 | [11 Reinforcement learning](11-reinforcement-learning/) | lecture: bandits, contextual bandits, off-policy RL; further reading on offline RL | [`offline-rl/`](11-reinforcement-learning/offline-rl/): offline RL as causal inference. Off-policy evaluation (IS = IPW, model-based = g-formula, DR = AIPW), pessimistic policy learning, hidden confounding |
 | all | [12 One dataset, many estimators](12-one-dataset-many-estimators/) | cross-topic: the hospital example with nonlinear confounding, estimated with the methods of 01–08 | [`notebooks/`](12-one-dataset-many-estimators/notebooks/one_dataset_many_estimators.ipynb): 14 ATE estimators and 7 CATE estimators compared |
 
 Project presentations (Nov 26–Dec 3) and assignments are not part of the graph.
@@ -96,7 +97,9 @@ stand in for a counterfactual one) and *how is it estimated?* (what is modelled,
   exclusion or continuity instead, and the answer is local.
 - **Structure on the counterfactual map itself** (09): cocycles model how an outcome transforms when the treatment
   changes, which reaches individual-level counterfactuals under extra assumptions.
-- **Sequential decisions** (11): the same doubly robust correction, used to evaluate and learn policies.
+- **Sequential decisions** (11): offline RL learns a policy from logs, and the value of a policy is a potential outcome
+  under a treatment regime. Importance sampling is IPW, model-based evaluation is the g-formula, doubly robust OPE is
+  AIPW, and the same two assumptions (no hidden confounders, positivity) are needed at every step.
 
 [12 One dataset, many estimators](12-one-dataset-many-estimators/) makes this concrete: one hospital (drug vs surgery,
 confounded by severity and age, with three irrelevant covariates) and every estimator from 01–08 on the same data, with
@@ -131,6 +134,7 @@ example, a hotel setting prices under unobserved demand.
 ├── 10-instruments-and-discontinuities/
 │   └── iv-rdd/                           code
 ├── 11-reinforcement-learning/
+│   └── offline-rl/                       code
 └── 12-one-dataset-many-estimators/       code (cross-topic)
 ```
 
